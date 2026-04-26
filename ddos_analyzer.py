@@ -1,24 +1,20 @@
 # SOFT2202 Formal Element Assignment
-# Author: sean Essien
+# Author: SeanEssien
 # Date: April 2026
-# DDoS Log Analyzer - Parts 1, 2, 3, and 4
-# Used copilot to help understand, not copy also used class notes on brightspace as a guide
-# All code written by me.
+# DDoS Log Analyzer - Complete Program (Parts 1-4)
 
-import ipwhois  # Only import allowed for Part 3
+import ipwhois
 
 
 # ============ PART 1: Extract IP Addresses ============
 
 def is_valid_ip(ip):
-    """Check if a string is a valid IPv4 address (no modules allowed)"""
+    """Check if a string is a valid IPv4 address"""
     parts = ip.split('.')
     
-    # Must have exactly 4 parts
     if len(parts) != 4:
         return False
     
-    # Check each part is a number between 0-255
     for part in parts:
         if not part.isdigit():
             return False
@@ -31,21 +27,17 @@ def is_valid_ip(ip):
 
 def extract_ips_from_file(input_filename):
     """Read log file and extract unique IP addresses"""
-    unique_ips = set()  # Set automatically removes duplicates
+    unique_ips = set()
     
     try:
         with open(input_filename, 'r') as file:
             for line in file:
-                # Find where IP is (it's after "[client ")
                 start = line.find("[client ")
                 if start != -1:
-                    # Get everything after "[client "
-                    after_client = line[start + 8:]  # 8 is length of "[client "
-                    # Find the closing bracket
+                    after_client = line[start + 8:]
                     end = after_client.find("]")
                     if end != -1:
                         ip = after_client[:end]
-                        # Only add if it's a real IP
                         if is_valid_ip(ip):
                             unique_ips.add(ip)
         
@@ -58,19 +50,19 @@ def extract_ips_from_file(input_filename):
 
 
 def save_unique_ips(ips, output_filename):
-    """Save unique IPs to a file (Part 1 output)"""
+    """Save unique IPs to a file"""
     with open(output_filename, 'w') as file:
         file.write("Unique IP Addresses from DDoS Log\n")
         file.write("=" * 40 + "\n\n")
         for ip in sorted(ips):
             file.write(f"{ip}\n")
-    print(f"Saved {len(ips)} unique IPs to {output_filen
+    print(f"Saved {len(ips)} unique IPs to {output_filename}")
+
 
 # ============ PART 2: Classify IP Addresses ============
 
 def classify_ip(ip):
     """Classify IP address as Class A, B, C, D, or E"""
-    # Get first octet (number before first dot)
     first_octet = int(ip.split('.')[0])
     
     if 1 <= first_octet <= 126:
@@ -96,19 +88,15 @@ def classify_ip(ip):
 def get_ip_info(ip):
     """Get country and description using whois lookup"""
     try:
-        # Create whois object for this IP
         whois = ipwhois.IPWhois(ip)
-        # Look up information
         result = whois.lookup_rdap()
         
-        # Extract country and description
         country = result.get('asn_country_code', 'Unknown')
         description = result.get('asn_description', 'No description available')
         
         return country, description
     
     except Exception as e:
-        # If lookup fails, return error message
         return "Error", f"Lookup failed: {str(e)[:50]}"
 
 
@@ -118,21 +106,16 @@ def generate_report(ips, output_filename):
     """Generate final report with all information"""
     
     with open(output_filename, 'w') as file:
-        # Report header
         file.write("=" * 60 + "\n")
         file.write("DDoS ATTACK ANALYSIS REPORT\n")
         file.write("=" * 60 + "\n\n")
         
-        # Process each IP
         for ip in sorted(ips):
-            # Part 2: Get class
             ip_class = classify_ip(ip)
             
-            # Part 3: Get whois info
-            print(f"Looking up {ip}...")  # Shows progress in console
+            print(f"Looking up {ip}...")
             country, description = get_ip_info(ip)
             
-            # Write to report
             file.write(f"IP Address: {ip}\n")
             file.write(f"Class:      {ip_class}\n")
             file.write(f"Country:    {country}\n")
@@ -150,12 +133,11 @@ def main():
     print("DDoS LOG ANALYZER")
     print("=" * 50 + "\n")
     
-    # File names
     input_file = "DDoDRawLog.txt"
     unique_ips_file = "unique_ips.txt"
     report_file = "ddos_report.txt"
     
-    # PART 1: Extract unique IPs
+    # PART 1
     print("PART 1: Extracting IP addresses...")
     print("-" * 30)
     unique_ips = extract_ips_from_file(input_file)
@@ -166,14 +148,14 @@ def main():
     
     save_unique_ips(unique_ips, unique_ips_file)
     
-    # PART 2 & 3 & 4: Classify, lookup, and generate report
+    # PART 2, 3, 4
     print("\nPART 2 & 3: Classifying IPs and looking up whois info...")
     print("-" * 50)
     print("(This may take a while for many IPs...)\n")
     
     generate_report(unique_ips, report_file)
     
-    # Display summary
+    # SUMMARY
     print("\n" + "=" * 50)
     print("SUMMARY")
     print("=" * 50)
@@ -187,3 +169,5 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+   
