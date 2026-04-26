@@ -1,1 +1,6 @@
-
+[Thu Oct 09 07:58:23 2025] [warn] [client 203.160.52.2] mod_fcgid error
+[Thu Oct 09 07:58:23 2025] [warn] [client 69.165.64.167] mod_fcgid error
+[Thu Oct 09 07:58:23 2025] [warn] [client 203.160.52.2] mod_fcgid error
+[Thu Oct 09 07:58:23 2025] [warn] [client 45.127.97.22] mod_fcgid error
+[Thu Oct 09 08:31:49 2025] [warn] [client 103.212.33.137] mod_fcgid error
+[Thu Oct 09 08:31:49 2025] [warn] [client 45.127.97.45] mod_fcgid error
