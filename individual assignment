@@ -1,43 +1,7 @@
-def extract_ips_simple(line):
-    """Simpler IP extraction using split"""
-    # Split by spaces
-    parts = line.split()
-    
-    # Look for the part that contains "[client"
-    for i, part in enumerate(parts):
-        if part == "[client":
-            # IP is the next part, remove the closing bracket
-            if i + 1 < len(parts):
-                ip_with_bracket = parts[i + 1]
-                # Remove the ']' at the end
-                ip = ip_with_bracket.rstrip(']')
-                
-                # Validate
-                if is_valid_ip(ip):
-                    return ip
-    return None
+# SOFT2202 Formal Element Assignment
+# Author: sean Essien
+# Date: April 2026
+# DDoS Log Analyzer - Parts 1, 2, 3, and 4
+# Used copilot to help understand, not copy also used class notes on brightspace as a guide
+# All code written by me.
 
-
-def extract_unique_ips_simple(input_file, output_file):
-    """Simpler version using split method"""
-    unique_ips = set()
-    
-    with open(input_file, 'r') as file:
-        for line in file:
-            # Find position of '[client'
-            start = line.find('[client')
-            if start != -1:
-                # Find the IP after [client
-                after_client = line[start + 7:]  # skip '[client '
-                end = after_client.find(']')
-                if end != -1:
-                    ip = after_client[:end]
-                    if is_valid_ip(ip):
-                        unique_ips.add(ip)
-    
-    # Write to file
-    with open(output_file, 'w') as out:
-        for ip in sorted(unique_ips):
-            out.write(f"{ip}\n")
-    
-    return unique_ips
